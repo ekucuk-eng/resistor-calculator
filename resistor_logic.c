@@ -173,7 +173,6 @@ double hesapla_5_band(Renk* b1, Renk* b2, Renk* b3, Renk* carpan, Renk* tolerans
     return r;
 }
 
-
 int ilk_band_kontrolu(Renk* ilk_band) 
 {
     // 1. Güvenlik Kontrolü: Pointer boş mu?
