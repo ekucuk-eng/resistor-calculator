@@ -4,7 +4,7 @@ Bu proje, direnç renk kodlarını kullanarak direnç değerlerini hesaplayan hi
 
 ## 🌟 Özellikler
 
-* **4, 5 ve 6 Band Desteği:** Standart ve yüksek hassasiyetli tüm direnç tiplerini hesaplar.
+* **4 ve 5 Band Desteği:** Standart ve yüksek hassasiyetli tüm direnç tiplerini hesaplar.
 * **Gerçek Zamanlı Görselleştirme:** Seçilen renklere göre dinamik olarak güncellenen CSS tabanlı direnç figürü.
 * **Hata Yönetimi:** Geçersiz renk dizilimleri (örn: ilk bandın siyah olması) için kullanıcıya anlamlı geri bildirimler verir.
 * **Birim Dönüştürme:** Sonuçları otomatik olarak Ω, kΩ, MΩ veya GΩ cinsinden formatlar.
