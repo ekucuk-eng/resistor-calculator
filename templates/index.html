@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Direnç Hesaplayıcı - C Motorlu</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>🔧 Direnç Hesaplayıcı</h1>
+        <p class="subtitle">C ile hesaplanır, Web ile gösterilir</p>
+        
+        <!-- Band sayısı seçici -->
+        <div class="band-selector">
+            <label>Band Sayısı:</label>
+            <button class="band-btn active" data-bands="4">4 Band</button>
+            <button class="band-btn" data-bands="5">5 Band</button>
+        </div>
+        
+        <!-- Direnç görseli (CSS ile oluşturulmuş) -->
+        <div class="resistor-container">
+            <div class="resistor">
+                <div class="lead lead-left"></div>
+                <div class="body" id="resistorBody">
+                    <div class="band" id="band1" style="background-color: #8B4513;"></div>
+                    <div class="band" id="band2" style="background-color: #8B4513;"></div>
+                    <div class="band" id="band3" style="background-color: #8B4513;"></div>
+                    <div class="band" id="band4" style="background-color: #FFD700;"></div>
+                    <div class="band" id="band5" style="display: none;"></div>
+                </div>
+                <div class="lead lead-right"></div>
+            </div>
+        </div>
+        
+        <!-- Renk seçim panelleri -->
+        <div class="bands-input">
+            <div class="band-control" id="control1">
+                <label>Band 1 (MSB)</label>
+                <select id="select1" class="color-select">
+                    <option value="kahverengi">Kahverengi</option>
+                    <option value="kirmizi">Kırmızı</option>
+                    <option value="turuncu">Turuncu</option>
+                    <option value="sari">Sarı</option>
+                    <option value="yesil">Yeşil</option>
+                    <option value="mavi">Mavi</option>
+                    <option value="mor">Mor</option>
+                    <option value="gri">Gri</option>
+                    <option value="beyaz">Beyaz</option>
+                </select>
+            </div>
+            <div class="band-control" id="control2">
+                <label>Band 2</label>
+                <select id="select2" class="color-select">
+                    <option value="siyah">Siyah</option>
+                    <option value="kahverengi">Kahverengi</option>
+                    <option value="kirmizi">Kırmızı</option>
+                    <option value="turuncu">Turuncu</option>
+                    <option value="sari">Sarı</option>
+                    <option value="yesil">Yeşil</option>
+                    <option value="mavi">Mavi</option>
+                    <option value="mor">Mor</option>
+                    <option value="gri">Gri</option>
+                    <option value="beyaz">Beyaz</option>
+                </select>
+            </div>
+            <div class="band-control" id="control3">
+                <label>Band 3</label>
+                <select id="select3" class="color-select">
+                    <option value="siyah">Siyah</option>
+                    <option value="kahverengi">Kahverengi</option>
+                    <option value="kirmizi">Kırmızı</option>
+                    <option value="turuncu">Turuncu</option>
+                    <option value="sari">Sarı</option>
+                    <option value="yesil">Yeşil</option>
+                    <option value="mavi">Mavi</option>
+                    <option value="mor">Mor</option>
+                    <option value="gri">Gri</option>
+                    <option value="beyaz">Beyaz</option>
+                </select>
+            </div>
+            <div class="band-control" id="control4">
+                <label>Band 4 (Çarpan)</label>
+                <select id="select4" class="color-select">
+                    <option value="siyah">Siyah (×1)</option>
+                    <option value="kahverengi">Kahverengi (×10)</option>
+                    <option value="kirmizi">Kırmızı (×100)</option>
+                    <option value="turuncu">Turuncu (×1k)</option>
+                    <option value="sari">Sarı (×10k)</option>
+                    <option value="yesil">Yeşil (×100k)</option>
+                    <option value="mavi">Mavi (×1M)</option>
+                    <option value="mor">Mor (×10M)</option>
+                    <option value="gri">Gri (×100M)</option>
+                    <option value="beyaz">Beyaz (×1G)</option>
+                    <option value="altin">Altın (×0.1)</option>
+                    <option value="gumus">Gümüş (×0.01)</option>
+                </select>
+            </div>
+            <div class="band-control hidden" id="control5">
+                <label>Band 5 (Tolerans)</label>
+                <select id="select5" class="color-select">
+                    <option value="kahverengi">Kahverengi (±1%)</option>
+                    <option value="kirmizi">Kırmızı (±2%)</option>
+                    <option value="yesil">Yeşil (±0.5%)</option>
+                    <option value="mavi">Mavi (±0.25%)</option>
+                    <option value="mor">Mor (±0.1%)</option>
+                    <option value="gri">Gri (±0.05%)</option>
+                    <option value="altin">Altın (±5%)</option>
+                    <option value="gumus">Gümüş (±10%)</option>
+                </select>
+            </div>
+        </div>
+        
+        <button id="calculateBtn" class="calculate-btn">🔍 HESAPLA (C ile)</button>
+        
+        <!-- Sonuç kartı -->
+        <div class="result-card" id="resultCard">
+            <div class="result-header">📊 Sonuç</div>
+            <div class="result-value" id="resultValue">---</div>
+            <div class="result-details" id="resultDetails">
+                <span>Tolerans: ---</span>
+                <span>Min: --- &Omega;</span>
+                <span>Max: --- &Omega;</span>
+            </div>
+            <div class="error-message" id="errorMessage"></div>
+        </div>
+        
+        <div class="badge">
+            ⚡ Hesaplama Motoru: C | Web Arayüz: Flask
+        </div>
+    </div>
+    
+    <script>
+        // Renk -> CSS renk eşlemesi
+        const colorMap = {
+            'siyah': '#000000',
+            'kahverengi': '#8B4513',
+            'kirmizi': '#FF0000',
+            'turuncu': '#FFA500',
+            'sari': '#FFFF00',
+            'yesil': '#00FF00',
+            'mavi': '#0000FF',
+            'mor': '#800080',
+            'gri': '#808080',
+            'beyaz': '#FFFFFF',
+            'altin': '#FFD700',
+            'gumus': '#C0C0C0'
+        };
+        
+        let currentBands = 4;
+        
+        // Band sayısı değişimi
+        document.querySelectorAll('.band-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.querySelectorAll('.band-btn').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                currentBands = parseInt(this.dataset.bands);
+                updateBandVisibility();
+                updateResistorVisuals();
+            });
+        });
+        
+        function updateBandVisibility() {
+           
+            const band3Control = document.getElementById('control3');
+            const band3Resistor = document.getElementById('band3');
+            
+            if (currentBands === 4) {
+                band3Control.classList.remove('hidden');
+                band3Resistor.style.display = 'flex';
+                document.getElementById('control4').querySelector('label').textContent = 'Band 4 (Çarpan/Tolerans)';
+            } else {
+                band3Control.classList.remove('hidden');
+                band3Resistor.style.display = 'flex';
+                if (currentBands === 5) {
+                    document.getElementById('control4').querySelector('label').textContent = 'Band 4 (Çarpan)';
+                } 
+            }
+            
+            // Band 5-6 göster/gizle
+            const control5 = document.getElementById('control5');
+            const control6 = document.getElementById('control6');
+            const band5Resistor = document.getElementById('band5');
+            
+        }
+        
+        // Tüm select'lerde değişiklik dinle
+        function updateResistorVisuals() {
+            for (let i = 1; i <= 5; i++) {
+                const select = document.getElementById(`select${i}`);
+                const band = document.getElementById(`band${i}`);
+                if (select && band) {
+                    const color = select.value;
+                    band.style.backgroundColor = colorMap[color] || '#8B4513';
+                }
+            }
+        }
+        
+        // Tüm select'lere event listener ekle
+        for (let i = 1; i <= 5; i++) {
+            const select = document.getElementById(`select${i}`);
+            if (select) {
+                select.addEventListener('change', updateResistorVisuals);
+            }
+        }
+        
+        // Hesaplama
+        document.getElementById('calculateBtn').addEventListener('click', async function() {
+            const bands = [];
+            
+            // Band 1 her zaman var
+            bands.push(document.getElementById('select1').value);
+            bands.push(document.getElementById('select2').value);
+            
+            // Band 3
+            if (currentBands >= 5) {
+                bands.push(document.getElementById('select3').value);
+            } else {
+                bands.push(document.getElementById('select4').value); // 4 bandta 3. band aslında çarpan
+            }
+            
+            // Band 4
+            bands.push(document.getElementById('select4').value);
+            
+            // Band 5
+            if (currentBands >= 5) {
+                bands.push(document.getElementById('select5').value);
+            }
+            
+            const resultCard = document.getElementById('resultCard');
+            const resultValue = document.getElementById('resultValue');
+            const resultDetails = document.getElementById('resultDetails');
+            const errorMessage = document.getElementById('errorMessage');
+            
+            resultCard.classList.remove('error');
+            errorMessage.textContent = '';
+            resultValue.textContent = 'Hesaplanıyor...';
+            
+            try {
+                const response = await fetch('/calculate', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ bands: bands })
+                });
+                
+                const data = await response.json();
+                
+                if (data.hata) {
+                    resultCard.classList.add('error');
+                    errorMessage.textContent = data.hata;
+                    resultValue.textContent = '❌ HATA';
+                    resultDetails.innerHTML = '<span>---</span><span>---</span><span>---</span>';
+                } else {
+                    // Ohm sembolünü düzelt
+                    let birimGoster = data.birim;
+                    if (!birimGoster.includes('&')) {
+                        birimGoster = birimGoster.replace(/Ω/g, '&Omega;');
+                    }
+                    
+                    // Değerleri formatla
+                    const deger = parseFloat(data.direnc).toFixed(2);
+                    const minVal = parseFloat(data.min).toFixed(2);
+                    const maxVal = parseFloat(data.max).toFixed(2);
+                    
+                    resultValue.innerHTML = `${deger} ${birimGoster}`;
+                    resultDetails.innerHTML = `
+                        <span>📊 Tolerans: ${data.tolerans}</span>
+                        <span>📉 Min: ${minVal} ${birimGoster}</span>
+                        <span>📈 Max: ${maxVal} ${birimGoster}</span>
+                    `;
+                }
+            } catch (err) {
+                resultCard.classList.add('error');
+                errorMessage.textContent = 'Bağlantı hatası: ' + err.message;
+                resultValue.textContent = '❌ HATA';
+            }
+        });
+        
+        // Başlangıç görselini güncelle
+        updateBandVisibility();
+        updateResistorVisuals();
+    </script>
+</body>
+</html>
+
