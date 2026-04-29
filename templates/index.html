@@ -161,28 +161,31 @@
         });
         
         function updateBandVisibility() {
-           
-            const band3Control = document.getElementById('control3');
-            const band3Resistor = document.getElementById('band3');
-            
-            if (currentBands === 4) {
-                band3Control.classList.remove('hidden');
-                band3Resistor.style.display = 'flex';
-                document.getElementById('control4').querySelector('label').textContent = 'Band 4 (Çarpan/Tolerans)';
-            } else {
-                band3Control.classList.remove('hidden');
-                band3Resistor.style.display = 'flex';
-                if (currentBands === 5) {
-                    document.getElementById('control4').querySelector('label').textContent = 'Band 4 (Çarpan)';
-                } 
-            }
-            
-            // Band 5-6 göster/gizle
-            const control5 = document.getElementById('control5');
-            const control6 = document.getElementById('control6');
-            const band5Resistor = document.getElementById('band5');
-            
-        }
+    const control3Label = document.getElementById('control3').querySelector('label');
+    const control4Label = document.getElementById('control4').querySelector('label');
+    const control5 = document.getElementById('control5');
+    const band5Resistor = document.getElementById('band5');
+
+    if (currentBands === 4) {
+        // 4 Bantlı Mod: [1.Sayı] [2.Sayı] [Çarpan] [Tolerans]
+        control3Label.textContent = 'Band 3 (Çarpan)';
+        control4Label.textContent = 'Band 4 (Tolerans)';
+        
+        // 5. kontrolü ve direnç üzerindeki 5. bandı gizle
+        control5.classList.add('hidden');
+        band5Resistor.style.display = 'none';
+
+    } else if (currentBands === 5) {
+        // 5 Bantlı Mod: [1.Sayı] [2.Sayı] [3.Sayı] [Çarpan] [Tolerans]
+        control3Label.textContent = 'Band 3 (3. Basamak)';
+        control4Label.textContent = 'Band 4 (Çarpan)';
+        
+        // 5. kontrolü göster (Tolerans için)
+        control5.classList.remove('hidden');
+        control5.querySelector('label').textContent = 'Band 5 (Tolerans)';
+        band5Resistor.style.display = 'flex';
+    }
+}
         
         // Tüm select'lerde değişiklik dinle
         function updateResistorVisuals() {
